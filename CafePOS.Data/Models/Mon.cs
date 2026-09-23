@@ -7,4 +7,5 @@ public class Mon
     public string DanhMuc { get; set; } = "";
     public decimal GiaBan { get; set; }
     public int SoLuongTon { get; set; }
+    public int DanhMucId { get; set; }
 }

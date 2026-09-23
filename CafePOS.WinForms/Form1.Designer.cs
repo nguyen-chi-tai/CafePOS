@@ -30,8 +30,11 @@
         {
             dgvMenu = new DataGridView();
             pnlTimKiem = new Panel();
+            btnSua = new Button();
+            btnThem = new Button();
             btnTimKiem = new Button();
             txtTimKiem = new TextBox();
+            btnNgungBan = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvMenu).BeginInit();
             pnlTimKiem.SuspendLayout();
             SuspendLayout();
@@ -50,6 +53,9 @@
             // 
             // pnlTimKiem
             // 
+            pnlTimKiem.Controls.Add(btnNgungBan);
+            pnlTimKiem.Controls.Add(btnSua);
+            pnlTimKiem.Controls.Add(btnThem);
             pnlTimKiem.Controls.Add(btnTimKiem);
             pnlTimKiem.Controls.Add(txtTimKiem);
             pnlTimKiem.Dock = DockStyle.Top;
@@ -58,9 +64,29 @@
             pnlTimKiem.Size = new Size(800, 50);
             pnlTimKiem.TabIndex = 1;
             // 
+            // btnSua
+            // 
+            btnSua.Location = new Point(629, 14);
+            btnSua.Name = "btnSua";
+            btnSua.Size = new Size(75, 23);
+            btnSua.TabIndex = 3;
+            btnSua.Text = "Sửa";
+            btnSua.UseVisualStyleBackColor = true;
+            btnSua.Click += btnSua_Click;
+            // 
+            // btnThem
+            // 
+            btnThem.Location = new Point(535, 14);
+            btnThem.Name = "btnThem";
+            btnThem.Size = new Size(75, 23);
+            btnThem.TabIndex = 2;
+            btnThem.Text = "+ Thêm món";
+            btnThem.UseVisualStyleBackColor = true;
+            btnThem.Click += btnThem_Click;
+            // 
             // btnTimKiem
             // 
-            btnTimKiem.Location = new Point(401, 16);
+            btnTimKiem.Location = new Point(441, 14);
             btnTimKiem.Name = "btnTimKiem";
             btnTimKiem.Size = new Size(75, 23);
             btnTimKiem.TabIndex = 1;
@@ -70,10 +96,20 @@
             // 
             // txtTimKiem
             // 
-            txtTimKiem.Location = new Point(77, 16);
+            txtTimKiem.Location = new Point(117, 14);
             txtTimKiem.Name = "txtTimKiem";
             txtTimKiem.Size = new Size(300, 23);
             txtTimKiem.TabIndex = 0;
+            // 
+            // btnNgungBan
+            // 
+            btnNgungBan.Location = new Point(21, 14);
+            btnNgungBan.Name = "btnNgungBan";
+            btnNgungBan.Size = new Size(75, 23);
+            btnNgungBan.TabIndex = 2;
+            btnNgungBan.Text = "button1";
+            btnNgungBan.UseVisualStyleBackColor = true;
+            btnNgungBan.Click += btnNgungBan_Click;
             // 
             // Form1
             // 
@@ -97,5 +133,8 @@
         private Panel pnlTimKiem;
         private Button btnTimKiem;
         private TextBox txtTimKiem;
+        private Button btnThem;
+        private Button btnSua;
+        private Button btnNgungBan;
     }
 }
