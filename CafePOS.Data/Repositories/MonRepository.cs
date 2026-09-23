@@ -5,18 +5,28 @@ namespace CafePOS.Data.Repositories;
 
 public class MonRepository
 {
-    public List<Mon> LayMonDangBan()
-    {
-        const string sql = @"
-            SELECT m.Id, m.Ten, d.Ten AS DanhMuc, m.GiaBan, m.SoLuongTon
-            FROM Mon m JOIN DanhMuc d ON m.DanhMucId = d.Id
-            WHERE m.DangBan = 1
-            ORDER BY d.Ten, m.Ten";
+    private const string CauSelect = @"
+        SELECT m.Id, m.Ten, d.Ten AS DanhMuc, m.GiaBan, m.SoLuongTon
+        FROM Mon m JOIN DanhMuc d ON m.DanhMucId = d.Id
+        WHERE m.DangBan = 1";
 
+    public List<Mon> LayMonDangBan() =>
+        ChayTruyVan(CauSelect + " ORDER BY d.Ten, m.Ten");
+
+        ChayTruyVan(CauSelect + " AND m.Ten LIKE N'%" + tuKhoa + "%'");
+
+    // ✅ Cách đúng: dùng tham số
+    public List<Mon> TimKiem(string tuKhoa) =>
+        ChayTruyVan(CauSelect + " AND m.Ten LIKE @tuKhoa",
+            new SqlParameter("@tuKhoa", "%" + tuKhoa + "%"));
+
+    private static List<Mon> ChayTruyVan(string sql, params SqlParameter[] thamSo)
+    {
         var ketQua = new List<Mon>();
 
         using var conn = new SqlConnection(Db.ConnectionString);
         using var cmd = new SqlCommand(sql, conn);
+        cmd.Parameters.AddRange(thamSo);
         conn.Open();
 
         using var reader = cmd.ExecuteReader();

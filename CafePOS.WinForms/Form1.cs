@@ -42,4 +42,23 @@ public partial class Form1 : Form
         dgvMenu.BackgroundColor = Color.White;
         dgvMenu.Font = new Font("Segoe UI", 11);
     }
+
+    private void dgvMenu_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+
+    }
+
+    private void btnTimKiem_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            dgvMenu.DataSource = new MonService().TimMon(txtTimKiem.Text);
+            DinhDangBang();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Lỗi tìm kiếm:\n" + ex.Message, "Lỗi",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
 }
