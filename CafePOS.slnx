@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CafePOS.Business/CafePOS.Business.csproj" />
+  <Project Path="CafePOS.Data/CafePOS.Data.csproj" />
+  <Project Path="CafePOS.WinForms/CafePOS.WinForms.csproj" />
+</Solution>
