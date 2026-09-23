@@ -6,6 +6,14 @@ namespace CafePOS.Data.Repositories;
 
 public class HoaDonRepository
 {
+    public decimal LayTongTien(int hoaDonId)
+    {
+        using var conn = new SqlConnection(Db.ConnectionString);
+        using var cmd = new SqlCommand("SELECT TongTien FROM HoaDon WHERE Id = @Id", conn);
+        cmd.Parameters.Add("@Id", SqlDbType.Int).Value = hoaDonId;
+        conn.Open();
+        return Convert.ToDecimal(cmd.ExecuteScalar());
+    }
     public int TaoHoaDon(int nhanVienId, List<ChiTietBan> chiTiet)
     {
         using var conn = new SqlConnection(Db.ConnectionString);
