@@ -1,4 +1,5 @@
-﻿using CafePOS.Data.Models;
+﻿using CafePOS.Business.BaoMat;
+using CafePOS.Data.Models;
 using CafePOS.Data.Repositories;
 
 namespace CafePOS.Business.Services;
@@ -7,14 +8,18 @@ public class MonService
 {
     private readonly MonRepository _repo = new();
 
+    // Xem thực đơn: ai đăng nhập cũng được (thu ngân cần để bán hàng)
     public List<Mon> TimMon(string tuKhoa)
     {
         tuKhoa = tuKhoa.Trim();
         return tuKhoa == "" ? _repo.LayMonDangBan() : _repo.TimKiem(tuKhoa);
     }
 
+    // Thêm / sửa món: chỉ Admin
     public void Luu(Mon mon)
     {
+        PhienDangNhap.YeuCauAdmin();
+
         mon.Ten = mon.Ten.Trim();
 
         if (mon.Ten == "") throw new LoiNghiepVu("Tên món không được để trống.");
@@ -29,9 +34,11 @@ public class MonService
             throw new LoiNghiepVu("Món này không còn tồn tại trong hệ thống.");
     }
 
-    // MỚI: sau này sẽ thêm quy tắc, ví dụ không ngừng bán món đang có trong hóa đơn chưa thanh toán
+    // Ngừng bán: chỉ Admin
     public void NgungBan(int id)
     {
+        PhienDangNhap.YeuCauAdmin();
+
         if (!_repo.NgungBan(id))
             throw new LoiNghiepVu("Món này không còn tồn tại trong hệ thống.");
     }

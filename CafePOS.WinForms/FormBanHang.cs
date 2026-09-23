@@ -1,4 +1,5 @@
-﻿using CafePOS.Business;
+﻿using CafePOS.Business.BaoMat;
+using CafePOS.Business;
 using CafePOS.Business.Models;
 using CafePOS.Business.Services;
 using CafePOS.Data.Models;
@@ -20,6 +21,8 @@ public partial class FormBanHang : Form
     private readonly Button btnBotMot = new();
     private readonly Button btnXoaMon = new();
     private readonly Button btnQuanLyThucDon = new();
+    private readonly Button btnQuanLyNhanVien = new();
+    private readonly Button btnDangXuat = new();
 
     public FormBanHang(NhanVien nguoiDangNhap)
     {
@@ -69,12 +72,33 @@ public partial class FormBanHang : Form
         };
         pnlTren.Controls.Add(lblTieuDe);
 
+        // Bên phải, từ phải sang trái: [Quản lý thực đơn] [Nhân viên] [Đăng xuất]
+        int mepPhai = pnlTren.Width - 15;
+
+        btnDangXuat.Text = "Đăng xuất";
+        btnDangXuat.SetBounds(mepPhai - 100, 12, 100, 32);
+        btnDangXuat.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        GiaoDien.NutPhu(btnDangXuat);
+        btnDangXuat.Click += BtnDangXuat_Click;
+
+        btnQuanLyNhanVien.Text = "Nhân viên";
+        btnQuanLyNhanVien.SetBounds(btnDangXuat.Left - 10 - 110, 12, 110, 32);
+        btnQuanLyNhanVien.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        GiaoDien.NutPhu(btnQuanLyNhanVien);
+        btnQuanLyNhanVien.Click += BtnQuanLyNhanVien_Click;
+
         btnQuanLyThucDon.Text = "Quản lý thực đơn";
-        btnQuanLyThucDon.SetBounds(pnlTren.Width - 15 - 160, 12, 160, 32);
+        btnQuanLyThucDon.SetBounds(btnQuanLyNhanVien.Left - 10 - 160, 12, 160, 32);
         btnQuanLyThucDon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         GiaoDien.NutPhu(btnQuanLyThucDon);
         btnQuanLyThucDon.Click += BtnQuanLyThucDon_Click;
-        pnlTren.Controls.Add(btnQuanLyThucDon);
+
+        pnlTren.Controls.AddRange(new Control[] { btnQuanLyThucDon, btnQuanLyNhanVien, btnDangXuat });
+
+        // Chỉ Admin thấy 2 nút quản lý.
+        // Đây chỉ là TIỆN LỢI cho người dùng. Bảo mật THẬT nằm ở PhienDangNhap.YeuCauAdmin() trong lớp Business.
+        btnQuanLyThucDon.Visible = PhienDangNhap.LaAdmin;
+        btnQuanLyNhanVien.Visible = PhienDangNhap.LaAdmin;
 
         // ── Cột đơn hàng bên phải ──
         var lblDonHang = new Label
@@ -284,6 +308,25 @@ public partial class FormBanHang : Form
         }
     }
 
+    private void BtnQuanLyNhanVien_Click(object? sender, EventArgs e)
+    {
+        using var form = new FormNhanVien();
+        form.ShowDialog(this);
+    }
+
+    private void BtnDangXuat_Click(object? sender, EventArgs e)
+    {
+        string loiNhan = _donHang.Trong
+            ? "Đăng xuất khỏi CafePOS?"
+            : "Đơn hàng đang gọi sẽ bị hủy.\nVẫn đăng xuất?";
+
+        var xacNhan = MessageBox.Show(this, loiNhan, "Đăng xuất",
+            MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+        if (xacNhan != DialogResult.Yes) return;
+
+        PhienDangNhap.KetThuc();
+        Application.Restart();   // khởi động lại app, quay về màn hình đăng nhập
+    }
     private void BtnQuanLyThucDon_Click(object? sender, EventArgs e)
     {
         using var form = new Form1();
