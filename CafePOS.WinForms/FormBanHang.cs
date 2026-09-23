@@ -8,7 +8,7 @@ namespace CafePOS.WinForms;
 public partial class FormBanHang : Form
 {
     private readonly MonService _monService = new();
-    private readonly BanHangService _banHangService = new();
+    private readonly BanHangService _banHangService;
     private readonly DonHang _donHang = new();
 
     // Các điều khiển được tạo bằng code
@@ -21,10 +21,12 @@ public partial class FormBanHang : Form
     private readonly Button btnXoaMon = new();
     private readonly Button btnQuanLyThucDon = new();
 
-    public FormBanHang()
+    public FormBanHang(NhanVien nguoiDangNhap)
     {
         InitializeComponent();
+        _banHangService = new BanHangService(nguoiDangNhap.Id);
         DungGiaoDien();
+        Text = $"CafePOS – Bán hàng – {nguoiDangNhap.HoTen}";
         Load += FormBanHang_Load;
     }
 

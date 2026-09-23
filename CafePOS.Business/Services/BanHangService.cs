@@ -7,11 +7,14 @@ namespace CafePOS.Business.Services;
 
 public class BanHangService
 {
-    // NO KY THUAT: dung tam nhan vien Id = 1.
-    // Giai doan 3 se thay bang nguoi dang dang nhap.
-    private const int NhanVienTamId = 1;
-
+    private readonly int _nhanVienId;
     private readonly HoaDonRepository _repo = new();
+
+    // Mỗi phiên bán hàng gắn với đúng một nhân viên đã đăng nhập
+    public BanHangService(int nhanVienId)
+    {
+        _nhanVienId = nhanVienId;
+    }
 
     public KetQuaThanhToan ThanhToan(DonHang donHang)
     {
@@ -24,7 +27,7 @@ public class BanHangService
 
         try
         {
-            int hoaDonId = _repo.TaoHoaDon(NhanVienTamId, chiTiet);
+            int hoaDonId = _repo.TaoHoaDon(_nhanVienId, chiTiet);
             return new KetQuaThanhToan(hoaDonId, _repo.LayTongTien(hoaDonId));
         }
         catch (KhongDuHangException ex)
