@@ -25,10 +25,9 @@ public class MonRepository
             OUTPUT INSERTED.Id
             VALUES (@Ten, @DanhMucId, @GiaBan, @SoLuongTon)";
 
-        using var conn = new SqlConnection(Db.ConnectionString);
+        using var conn = Db.MoKetNoi();
         using var cmd = new SqlCommand(sql, conn);
         GanThamSo(cmd, mon);
-        conn.Open();
         return Convert.ToInt32(cmd.ExecuteScalar());
     }
 
@@ -39,23 +38,20 @@ public class MonRepository
             SET Ten = @Ten, DanhMucId = @DanhMucId, GiaBan = @GiaBan, SoLuongTon = @SoLuongTon
             WHERE Id = @Id";
 
-        using var conn = new SqlConnection(Db.ConnectionString);
+        using var conn = Db.MoKetNoi();
         using var cmd = new SqlCommand(sql, conn);
         GanThamSo(cmd, mon);
         cmd.Parameters.Add("@Id", SqlDbType.Int).Value = mon.Id;
-        conn.Open();
         return cmd.ExecuteNonQuery() == 1;
     }
 
-    // MỚI: ngừng bán = đánh dấu DangBan = 0, KHÔNG xóa khỏi database
     public bool NgungBan(int id)
     {
         const string sql = "UPDATE Mon SET DangBan = 0 WHERE Id = @Id";
 
-        using var conn = new SqlConnection(Db.ConnectionString);
+        using var conn = Db.MoKetNoi();
         using var cmd = new SqlCommand(sql, conn);
         cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
-        conn.Open();
         return cmd.ExecuteNonQuery() == 1;
     }
 
@@ -71,10 +67,9 @@ public class MonRepository
     {
         var ketQua = new List<Mon>();
 
-        using var conn = new SqlConnection(Db.ConnectionString);
+        using var conn = Db.MoKetNoi();
         using var cmd = new SqlCommand(sql, conn);
         cmd.Parameters.AddRange(thamSo);
-        conn.Open();
 
         using var reader = cmd.ExecuteReader();
         while (reader.Read())

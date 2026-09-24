@@ -1,4 +1,5 @@
-﻿using CafePOS.Data.Models;
+﻿using CafePOS.Data;
+using CafePOS.Data.Models;
 
 namespace CafePOS.Business.BaoMat;
 
@@ -9,12 +10,18 @@ public static class PhienDangNhap
     public static bool LaAdmin => NguoiDung?.VaiTro == "Admin";
 
     // "internal": CHỈ code trong project Business mới được bắt đầu phiên.
-    // Giao diện không thể tự tuyên bố "tôi là Admin".
-    internal static void BatDau(NhanVien nv) => NguoiDung = nv;
+    internal static void BatDau(NhanVien nv)
+    {
+        NguoiDung = nv;
+        Db.NhanVienHienTaiId = nv.Id;     // MỚI: để database biết ai đang làm việc
+    }
 
-    public static void KetThuc() => NguoiDung = null;
+    public static void KetThuc()
+    {
+        NguoiDung = null;
+        Db.NhanVienHienTaiId = null;      // MỚI
+    }
 
-    // Người gác cổng: gọi ở đầu mọi thao tác chỉ Admin được làm
     public static void YeuCauAdmin()
     {
         if (!LaAdmin)
