@@ -23,6 +23,7 @@ public partial class FormBanHang : Form
     private readonly Button btnQuanLyThucDon = new();
     private readonly Button btnQuanLyNhanVien = new();
     private readonly Button btnDangXuat = new();
+    private readonly Button btnBaoCao = new();
 
     public FormBanHang(NhanVien nguoiDangNhap)
     {
@@ -72,7 +73,7 @@ public partial class FormBanHang : Form
         };
         pnlTren.Controls.Add(lblTieuDe);
 
-        // Bên phải, từ phải sang trái: [Quản lý thực đơn] [Nhân viên] [Đăng xuất]
+        // Bên phải, từ phải sang trái: [Quản lý thực đơn] [Nhân viên] [Báo cáo] [Đăng xuất]
         int mepPhai = pnlTren.Width - 15;
 
         btnDangXuat.Text = "Đăng xuất";
@@ -81,8 +82,14 @@ public partial class FormBanHang : Form
         GiaoDien.NutPhu(btnDangXuat);
         btnDangXuat.Click += BtnDangXuat_Click;
 
+        btnBaoCao.Text = "Báo cáo";
+        btnBaoCao.SetBounds(btnDangXuat.Left - 10 - 100, 12, 100, 32);
+        btnBaoCao.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        GiaoDien.NutPhu(btnBaoCao);
+        btnBaoCao.Click += BtnBaoCao_Click;
+
         btnQuanLyNhanVien.Text = "Nhân viên";
-        btnQuanLyNhanVien.SetBounds(btnDangXuat.Left - 10 - 110, 12, 110, 32);
+        btnQuanLyNhanVien.SetBounds(btnBaoCao.Left - 10 - 110, 12, 110, 32);
         btnQuanLyNhanVien.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         GiaoDien.NutPhu(btnQuanLyNhanVien);
         btnQuanLyNhanVien.Click += BtnQuanLyNhanVien_Click;
@@ -93,11 +100,13 @@ public partial class FormBanHang : Form
         GiaoDien.NutPhu(btnQuanLyThucDon);
         btnQuanLyThucDon.Click += BtnQuanLyThucDon_Click;
 
-        pnlTren.Controls.AddRange(new Control[] { btnQuanLyThucDon, btnQuanLyNhanVien, btnDangXuat });
+        pnlTren.Controls.AddRange(new Control[] { btnQuanLyThucDon, btnQuanLyNhanVien, btnBaoCao, btnDangXuat });
 
-        // Chỉ Admin thấy 2 nút quản lý.
+        // Chỉ Admin thấy các nút quản lý.
         // Đây chỉ là TIỆN LỢI cho người dùng. Bảo mật THẬT nằm ở PhienDangNhap.YeuCauAdmin() trong lớp Business.
         btnQuanLyThucDon.Visible = PhienDangNhap.LaAdmin;
+        btnQuanLyNhanVien.Visible = PhienDangNhap.LaAdmin;
+        btnBaoCao.Visible = PhienDangNhap.LaAdmin;
         btnQuanLyNhanVien.Visible = PhienDangNhap.LaAdmin;
 
         // ── Cột đơn hàng bên phải ──
@@ -306,6 +315,12 @@ public partial class FormBanHang : Form
             TaiMenu();
             CapNhatDonHang();
         }
+    }
+
+    private void BtnBaoCao_Click(object? sender, EventArgs e)
+    {
+        using var form = new FormBaoCao();
+        form.ShowDialog(this);
     }
 
     private void BtnQuanLyNhanVien_Click(object? sender, EventArgs e)
