@@ -16,7 +16,7 @@ public class DonHang
         var dong = _cacDong.FirstOrDefault(d => d.MonId == mon.Id);
         int soLuongMoi = (dong?.SoLuong ?? 0) + 1;
 
-        if (soLuongMoi > mon.SoLuongTon)
+        if (soLuongMoi >= mon.SoLuongTon)
             throw new LoiNghiepVu(mon.SoLuongTon == 0
                 ? $"\"{mon.Ten}\" đã hết hàng."
                 : $"\"{mon.Ten}\" chỉ còn {mon.SoLuongTon} trong kho.");
