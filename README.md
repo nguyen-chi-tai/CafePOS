@@ -121,7 +121,7 @@ dotnet publish .\CafePOS.WinForms\CafePOS.WinForms.csproj -c Release -r win-x64 
 
 ## Known limitations and next steps
 
-- **No automated tests yet.** Next step: unit tests for the business layer (cart rules, validation, authorization).
+- **Unit tests cover the cart and password hashing** (`CafePOS.Tests`, xUnit). Service-level tests need repository interfaces, which is the next refactoring step.
 - **Manual database setup.** A production version would use database migrations and an installer.
 - **Session state is static.** Fine for a single-user desktop app; a web API would carry identity per request.
 - **Invoice numbers use `IDENTITY`**, which leaves gaps after rolled-back transactions. Legally sequential invoice numbering would need a separate sequence.
